@@ -1,43 +1,55 @@
-# NextBus Card
+# LTA Card
 
-A card which displays multiple public transit routes using the [NextBus sensors](https://www.home-assistant.io/integrations/nextbus/). This improves on a generic entity display making it appear more akin to a mobile phone widget, giving you more than just the next route's countdown.
+![Stability:Beta](https://img.shields.io/badge/stability-beta-orange)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/release/bforbenny/lovelace-lta-card)](https://github.com/bforbenny/lovelace-lta-card/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE.md)
+[![GitHub issues](https://img.shields.io/github/issues/bforbenny/lovelace-lta-card)](https://GitHub.com/bforbenny/lovelace-lta-card/issues/)
 
-![Screenshot](/screenshot.png?raw=true 'Example Card')
+A [HomeAssistant](https://www.home-assistant.io/) Lovelace custom card which displays public transport using the [HA-LTA](https://github.com/Codestian/ha-lta) sensors.
+This improves on a generic entity display making it easier to digest data.
 
-[![GitHub Release][releases-shield]][releases]
-[![License][license-shield]](LICENSE.md)
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+![Screenshot](/docs/Screenshot.jpg?raw=true "Example Card")
 
-![Project Maintenance][maintenance-shield]
-[![GitHub Activity][commits-shield]][commits]
+## Requirement
 
-## Options
+Make sure you have an [HA-LTA](https://github.com/Codestian/ha-lta) entities configured and running
 
-| Name     | Type     | Requirement  | Description              | Default          |
-| -------- | -------- | ------------ | ------------------------ | ---------------- |
-| type     | string   | **Required** | `custom:nextbus-card`    |
-| name     | string   | **Optional** | Card name                | `Public Transit` |
-| entities | string[] | **Optional** | List of nextbus entities | `none`           |
+## Installation
 
-## Developing with [devcontainer][devcontainer]
+1. Download and copy [`lta-card.js`](/lta-card.js) into your `/config/www/` directory.
+2. Add a reference to `lta-card.js` inside your `Manage resources` when editing dashboard
 
-1. Fork and clone the repository.
-2. Open the [devcontainer][devcontainer] and run `npm start` when it's ready.
-3. The compiled `.js` file will be accessible on
-   `http://127.0.0.1:5000/nextbus-card.js`.
-4. On a running Home Assistant installation add this to your Lovelace
-   `resources:`
+## Using the card
+
+Add a manual card with the sample configuration
+
+### Sample configuration
 
 ```yaml
-- url: 'http://127.0.0.1:5000/nextbus-card.js'
-  type: module
+cards:
+  - type: "custom:lta-card"
+    header: "Burgundy Hill"
+    threshold: 4
+    group:
+      - name: "77"
+        entities:
+          - entity: sensor.lta_42319_77_1
+          - entity: sensor.lta_42319_77_2
+          - entity: sensor.lta_42319_77_3
+      - name: "106"
+        entities:
+          - entity: sensor.lta_42319_106_1
+          - entity: sensor.lta_42319_106_2
+          - entity: sensor.lta_42319_106_3
 ```
 
-_Change "127.0.0.1" to the IP of your development machine._
+### Options
 
-### Bonus
-
-If you need a fresh test instance you can install a fresh Home Assistant instance inside the devcontainer as well.
-
-1. Run the command `dc start`.
-2. Home Assistant will install and will eventually be running on port `9123`
+| Name       | Type     | Requirement  | Description                                          | Default      |
+| ---------- | -------- | ------------ | ---------------------------------------------------- | ------------ |
+| type       | string   | **Required** | `custom:lta-card`                                    |              |
+| header     | string   | Optional     | Card Title                                           | `Next Buses` |
+| threshold  | integer  | Optional     | Orange text color to if `state` < `threshold` minute | `0`          |
+| group      | object[] | **Required** | New row of same bus service                          |              |
+| - name     | string   | Optional     | Bus service number to show on first column           | `none`       |
+| - entities | string[] | Optional     | List of lta-bus entities                             | `none`       |
