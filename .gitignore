@@ -1,4 +1,2 @@
-/node_modules/
-/.rpt2_cache/
-package-lock.json
-/dist
+/docs/
+LICENSE.md
